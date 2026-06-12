@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel Principal - Estudio Fotográfico</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px; }
+        .header { background-color: #333; color: white; padding: 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { margin: 0; font-size: 24px; }
+        .btn-logout { background-color: #dc3545; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; }
+        .menu-container { margin-top: 30px; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center; }
+        .card h3 { margin-top: 0; color: #333; }
+        .card p { color: #666; font-size: 14px; }
+        .btn-menu { display: inline-block; width: 80%; padding: 10px; background-color: #007BFF; color: white; text-decoration: none; border-radius: 4px; font-weight: bold; }
+        .btn-menu:hover { background-color: #0056b3; }
+        .admin-only { display: none; } /* Por defecto ocultamos lo del administrador */
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>Sistema de Control de Eventos</h1>
+    <button class="btn-logout" onclick="cerrarSesion()">Cerrar Sesión</button>
+</div>
+
+<h2 id="saludo">Bienvenido al sistema</h2>
+
+<div class="menu-container">
+    
+    <div class="card admin-only" id="moduloContratos">
+        <h3>Registrar Eventos</h3>
+        <p>Dar de alta nuevos contratos, misas, fiestas y pagos de clientes.</p>
+        <a href="contratos.html" class="btn-menu">Ir a Contratos</a>
+    </div>
+
+    <div class="card admin-only" id="moduloPaquetes">
+        <h3>Gestionar Paquetes</h3>
+        <p>Configurar precios, número de fotos y si incluye video o sesión.</p>
+        <a href="paquetes.html" class="btn-menu">Configurar Paquetes</a>
+    </div>
+
+    <div class="card" id="moduloAsignaciones">
+        <h3>Mis Asignaciones</h3>
+        <p>Ver la agenda de eventos y las labores asignadas de fotografía o video.</p>
+        <a href="asignaciones.html" class="btn-menu">Ver mi Agenda</a>
+    </div>
+
+</div>
+
+<script>
+    // Leemos el rol que guardamos en el login
+    const rolUsuario = sessionStorage.getItem('rol');
+
+    // Si no hay ningún rol, significa que no ha iniciado sesión, lo mandamos al login
+    if (!rolUsuario) {
+        window.location.href = 'login.html';
+    }
+
+    // Si es Administrador (Rol 1), mostramos las tarjetas ocultas
+    if (rolUsuario === "1") {
+        document.getElementById('saludo').innerText = "Panel de Administrador";
+        
+        // Buscamos todos los elementos con la clase 'admin-only' y los mostramos
+        const elementosAdmin = document.querySelectorAll('.admin-only');
+        elementosAdmin.forEach(elemento => {
+            elemento.style.display = 'block';
+        });
+    } else {
+        document.getElementById('saludo').innerText = "Panel de Empleado";
+    }
+
+    function cerrarSesion() {
+        sessionStorage.clear();
+        window.location.href = 'login.html';
+    }
+</script>
+
+</body>
+</html>
