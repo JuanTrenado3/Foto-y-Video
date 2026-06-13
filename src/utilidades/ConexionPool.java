@@ -7,25 +7,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ConexionPool {
-    // Credenciales de tu base de datos local en Laragon
     private static final String URL = "jdbc:mysql://localhost:3306/estudio_fotografico";
     private static final String USUARIO = "root";
     private static final String PASSWORD = "";
-    
-    // Tamaño del pool (cuántas conexiones mantenemos abiertas al mismo tiempo)
+    //Tamaño de pool osea conexiones abiertas al mismo tiempo
     private static final int MAX_CONEXIONES = 5;
     
-    // Instancia única (Patrón Singleton)
+    // Instancia única 
     private static ConexionPool instancia = null;
     private List<Connection> conexionesDisponibles = new ArrayList<>();
 
     // Constructor privado para inicializar las conexiones
     private ConexionPool() {
         try {
-            // Cargar el driver de MySQL que tengo en la caperta lib
             Class.forName("com.mysql.cj.jdbc.Driver");
-            
-            // Llenar la "piscina" de conexiones listas para usarse
             for (int i = 0; i < MAX_CONEXIONES; i++) {
                 conexionesDisponibles.add(crearConexion());
             }
@@ -51,7 +46,7 @@ public class ConexionPool {
     public synchronized Connection getConnection() {
         if (conexionesDisponibles.isEmpty()) {
             System.out.println("Todas las conexiones están en uso. Espera un momento.");
-            return null; // En un sistema real aquí se pondría a la espera, pero así sirve perfecto para el proyecto
+            return null; 
         }
         // Saca la última conexión de la lista y la entrega
         return conexionesDisponibles.remove(conexionesDisponibles.size() - 1);
@@ -60,7 +55,7 @@ public class ConexionPool {
     // Método que usarán tus DAOs para devolver la conexión cuando terminen
     public synchronized void releaseConnection(Connection conexion) {
         if (conexion != null) {
-            conexionesDisponibles.add(conexion); // La regresa a la lista
+            conexionesDisponibles.add(conexion); 
         }
     }
 }

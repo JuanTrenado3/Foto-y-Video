@@ -16,11 +16,10 @@ public class ProcesarContrato extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        // Configuramos para que acepte acentos y la Ñ
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
 
-        // 1. Recibimos los datos del HTML
+        // Datos para el contrato
         String nombreCliente = request.getParameter("nombre_cliente");
         String telCliente = request.getParameter("tel_cliente");
         String nombreFestejado = request.getParameter("nombre_festejado");
@@ -31,19 +30,19 @@ public class ProcesarContrato extends HttpServlet {
         String dirFiesta = request.getParameter("dir_fiesta");
         String horaFiesta = request.getParameter("hora_fiesta");
         
-        // Convertimos a decimales (double) los dineros
+        // Convertimos a decimales por double
         double costoTotal = Double.parseDouble(request.getParameter("costo_total"));
         double anticipoPagado = Double.parseDouble(request.getParameter("anticipo_pagado"));
 
-        // 2. Preparamos la conexión y el SQL
+        // Aqui es la conexion y el ql
         Connection conn = null;
         PreparedStatement ps = null;
 
         try (PrintWriter out = response.getWriter()) {
-            // Usamos tu Pool de Conexiones
+            // Usamos el archivo de la conexion 
             conn = ConexionPool.getInstancia().getConnection();
             
-            // Consulta SQL corregida: dejamos que MySQL calcule el saldo_restante
+            // Aqui dejamos que MySQL calcule el saldo_restante del contrato 
             String sql = "INSERT INTO Contratos (nombre_cliente, nombre_festejado, tel_cliente, dir_misa, dir_fiesta, fecha_evento, hora_misa, hora_fiesta, id_paquete, costo_total, anticipo_pagado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             
             ps = conn.prepareStatement(sql);
@@ -54,7 +53,7 @@ public class ProcesarContrato extends HttpServlet {
             ps.setString(5, dirFiesta);
             ps.setString(6, fechaEvento);
             
-            // Si la hora viene vacía, mandamos un nulo a la BD
+            // Si no se pone hora se pone un null para la bd
             if(horaMisa == null || horaMisa.isEmpty()) { ps.setNull(7, java.sql.Types.TIME); } else { ps.setString(7, horaMisa); }
             if(horaFiesta == null || horaFiesta.isEmpty()) { ps.setNull(8, java.sql.Types.TIME); } else { ps.setString(8, horaFiesta); }
             
@@ -62,12 +61,12 @@ public class ProcesarContrato extends HttpServlet {
             ps.setDouble(10, costoTotal);
             ps.setDouble(11, anticipoPagado);
 
-            // 3. Ejecutamos el guardado
+            // se guarda
             int filasAfectadas = ps.executeUpdate();
 
             if (filasAfectadas > 0) {
-                // Si todo salió bien, mostramos un mensaje de éxito
-                out.println("<script>alert('¡Contrato registrado con éxito!'); window.location.href='index.html';</script>");
+                // mensaje de que se guardo o no se pudo guardar
+                out.println("<script>alert('Contrato registrado con éxito'); window.location.href='index.html';</script>");
             } else {
                 out.println("<script>alert('Error: No se pudo guardar el contrato.'); window.history.back();</script>");
             }

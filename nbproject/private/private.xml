@@ -5,6 +5,14 @@
         <group>
             <file>file:/C:/Users/juani/OneDrive/Escritorio/BD2/WebContent/login.html</file>
             <file>file:/C:/Users/juani/OneDrive/Escritorio/BD2/WebContent/index.html</file>
+            <file>file:/C:/Users/juani/OneDrive/Escritorio/BD2/WebContent/contratos.html</file>
+            <file>file:/C:/Users/juani/OneDrive/Escritorio/BD2/src/ProcesarContrato.java</file>
+            <file>file:/C:/Users/juani/OneDrive/Escritorio/BD2/WebContent/META-INF/context.xml</file>
+            <file>file:/C:/Users/juani/OneDrive/Escritorio/BD2/src/utilidades/ConexionPool.java</file>
+            <file>file:/C:/Users/juani/OneDrive/Escritorio/BD2/WebContent/paquetes.html</file>
+            <file>file:/C:/Users/juani/OneDrive/Escritorio/BD2/src/ProcesarPaquete.java</file>
+            <file>file:/C:/Users/juani/OneDrive/Escritorio/BD2/src/ObtenerPaquetes.java</file>
+            <file>file:/C:/Users/juani/OneDrive/Escritorio/BD2/src/EliminarPaquete.java</file>
         </group>
     </open-files>
 </project-private>

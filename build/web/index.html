@@ -45,19 +45,26 @@
         <p>Ver la agenda de eventos y las labores asignadas de fotografía o video.</p>
         <a href="asignaciones.html" class="btn-menu">Ver mi Agenda</a>
     </div>
+    
+   <div class="card admin-only" id="moduloRegistoUsuarios">
+        <h3>Registrar Usuarios</h3>
+        <p>Registrar nuevos trabajadores</p>
+        <a href="registro_usuario.html" class="btn-menu">Registro</a>
+    </div>
+    
 
 </div>
 
 <script>
-    // Leemos el rol que guardamos en el login
+    // se lee el rol del usuario
     const rolUsuario = sessionStorage.getItem('rol');
 
-    // Si no hay ningún rol, significa que no ha iniciado sesión, lo mandamos al login
+    // Si no hay ningún rol no se ha iniciado sesion y se manda a la pagina de login
     if (!rolUsuario) {
         window.location.href = 'login.html';
     }
 
-    // Si es Administrador (Rol 1), mostramos las tarjetas ocultas
+    // Si es Administrador (Rol 1)
     if (rolUsuario === "1") {
         document.getElementById('saludo').innerText = "Panel de Administrador";
         
