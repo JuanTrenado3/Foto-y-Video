@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost:3306
--- Tiempo de generación: 13-06-2026 a las 19:43:03
+-- Tiempo de generación: 13-06-2026 a las 21:22:39
 -- Versión del servidor: 8.4.3
 -- Versión de PHP: 8.3.30
 
@@ -101,6 +101,7 @@ CREATE TABLE `paquetes` (
   `num_fotos` int DEFAULT '0',
   `incluye_video` tinyint(1) DEFAULT '0',
   `incluye_sesion` tinyint(1) DEFAULT '0',
+  `incluye_foto_grande` tinyint(1) DEFAULT '0',
   `precio_base` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -108,8 +109,9 @@ CREATE TABLE `paquetes` (
 -- Volcado de datos para la tabla `paquetes`
 --
 
-INSERT INTO `paquetes` (`id_paquete`, `categoria_evento`, `nombre_paquete`, `num_fotos`, `incluye_video`, `incluye_sesion`, `precio_base`) VALUES
-(1, 'Boda', 'Paquete Boda Premium (Prueba)', 100, 1, 1, 8500.00);
+INSERT INTO `paquetes` (`id_paquete`, `categoria_evento`, `nombre_paquete`, `num_fotos`, `incluye_video`, `incluye_sesion`, `incluye_foto_grande`, `precio_base`) VALUES
+(1, 'Boda', 'Paquete Boda Premium ', 100, 1, 1, 1, 18000.00),
+(2, 'Boda', 'Paquete basico (video)', 0, 1, 0, 0, 4000.00);
 
 -- --------------------------------------------------------
 
@@ -198,7 +200,7 @@ ALTER TABLE `empleados`
 -- AUTO_INCREMENT de la tabla `paquetes`
 --
 ALTER TABLE `paquetes`
-  MODIFY `id_paquete` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_paquete` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `roles`
