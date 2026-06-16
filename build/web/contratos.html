@@ -45,11 +45,11 @@
                 <label for="fecha_evento">Fecha del Evento:</label>
                 <input type="date" id="fecha_evento" name="fecha_evento" required>
             </div>
+            
             <div class="form-group">
                 <label for="id_paquete">Paquete Contratado:</label>
                 <select id="id_paquete" name="id_paquete" required>
-                    <option value="">Seleccione un paquete...</option>
-                    <option value="1">Paquete Boda Premium (Prueba)</option>
+                    <option value="">Cargando paquetes...</option>
                 </select>
             </div>
             
@@ -83,6 +83,21 @@
         </div>
     </form>
 </div>
+
+<script>
+    function cargarOpcionesPaquetes() {
+        fetch('ObtenerOpcionesPaquetes')
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('id_paquete').innerHTML = html;
+        })
+        .catch(error => console.error('Error al cargar paquetes:', error));
+    }
+
+    window.onload = function() {
+        cargarOpcionesPaquetes();
+    };
+</script>
 
 </body>
 </html>

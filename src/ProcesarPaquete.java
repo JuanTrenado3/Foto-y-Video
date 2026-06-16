@@ -34,9 +34,8 @@ public class ProcesarPaquete extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             conn = ConexionPool.getInstancia().getConnection();
             String sql;
-
+//registro de paquete con datos
             if (idPaquete == null || idPaquete.trim().isEmpty()) {
-                // Le agregamos incluye_foto_grande a la consulta
                 sql = "INSERT INTO Paquetes (categoria_evento, nombre_paquete, num_fotos, incluye_video, incluye_sesion, incluye_foto_grande, precio_base) VALUES (?, ?, ?, ?, ?, ?, ?)";
                 ps = conn.prepareStatement(sql);
                 ps.setString(1, categoriaEvento);

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Asignación de Personal - Estudio Fotográfico</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px; }
+        .header { background-color: #333; color: white; padding: 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .btn-back { background-color: #6c757d; color: white; border: none; padding: 8px 15px; border-radius: 4px; text-decoration: none; }
+        
+        .container { display: flex; gap: 20px; flex-wrap: wrap; }
+        .table-container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); flex: 2; min-width: 400px; }
+        .form-container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); flex: 1; min-width: 300px; display: none; /* Oculto por defecto */ }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: #28a745; color: white; }
+        
+        .btn-action { background-color: #007BFF; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .btn-action:hover { background-color: #0056b3; }
+        
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; color: #333; }
+        select, input { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+        
+        .btn-submit { width: 100%; padding: 10px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; margin-bottom: 10px; }
+        .btn-cancel { width: 100%; padding: 10px; background-color: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        
+        .detalles-evento { background-color: #e9ecef; padding: 10px; border-radius: 4px; margin-bottom: 15px; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h2>Agenda: Asignación de Personal</h2>
+    <a href="index.html" class="btn-back">Volver al Menú</a>
+</div>
+
+<div class="container">
+    <div class="table-container">
+        <h3>Próximos Eventos</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Cliente / Evento</th>
+                    <th>Paquete</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="tablaContratos">
+                </tbody>
+        </table>
+    </div>
+
+    <div class="form-container" id="panelAsignacion">
+        <h3>Asignar Equipo</h3>
+        
+        <div class="detalles-evento" id="infoEvento">
+            </div>
+
+        <form id="formAsignacion">
+            <input type="hidden" id="id_contrato" name="id_contrato">
+            <input type="hidden" id="fecha_evento" name="fecha_evento">
+
+            <div class="form-group" id="divFotografo">
+                <label for="id_fotografo">Fotógrafo:</label>
+                <select id="id_fotografo" name="id_fotografo">
+                    <option value="">Cargando disponibles...</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="divCamarografo">
+                <label for="id_camarografo">Camarógrafo:</label>
+                <select id="id_camarografo" name="id_camarografo">
+                    <option value="">Cargando disponibles...</option>
+                </select>
+            </div>
+
+            <button type="button" class="btn-submit" onclick="guardarAsignacion()">Confirmar Asignación</button>
+            <button type="button" class="btn-cancel" onclick="cerrarPanel()">Cancelar</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function cerrarPanel() {
+        document.getElementById('panelAsignacion').style.display = 'none';
+        document.getElementById('formAsignacion').reset();
+    }
+
+    //funcion que se activa al dar clic en "Asignar" en la tabla
+    function prepararAsignacion(idContrato, cliente, fecha, nombrePaquete) {
+        //llenamos los datos ocultos del formulario
+        document.getElementById('id_contrato').value = idContrato;
+        document.getElementById('fecha_evento').value = fecha;
+        
+        //resumen visual del evento registradi
+        document.getElementById('infoEvento').innerHTML = 
+            "<strong>" + cliente + "</strong><br>" + 
+            "Fecha: " + fecha + "<br>" + 
+            "Paquete: " + nombrePaquete;
+
+        //panel de asignacion
+        document.getElementById('panelAsignacion').style.display = 'block';
+    }
+
+    //funcion para ir a la base de datos y traer los eventos pendientes de asignacion
+    function cargarTablaContratos() {
+        fetch('ObtenerContratosParaAsignar')
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('tablaContratos').innerHTML = html;
+        })
+        .catch(error => console.error('Error al cargar contratos:', error));
+    }
+
+    //Cuando se abra la pagina tendra que cargar la tabla
+    window.onload = function() {
+        cargarTablaContratos();
+    };
+</script>
+
+</body>
+</html>

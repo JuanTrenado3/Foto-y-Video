@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Panel Principal - Estudio Fotográfico</title>
+    <title>Estudio de Video y Fotográfico</title>
     <style>
         body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px; }
         .header { background-color: #333; color: white; padding: 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
@@ -41,9 +41,9 @@
     </div>
 
     <div class="card" id="moduloAsignaciones">
-        <h3>Mis Asignaciones</h3>
-        <p>Ver la agenda de eventos y las labores asignadas de fotografía o video.</p>
-        <a href="asignaciones.html" class="btn-menu">Ver mi Agenda</a>
+        <h3>Agenda de eventos</h3>
+        <p>Ve tu agenda de eventos.</p>
+        <a href="eventos.html" class="btn-menu">Ver mi Agenda</a>
     </div>
     
    <div class="card admin-only" id="moduloRegistoUsuarios">
@@ -52,31 +52,60 @@
         <a href="registro_usuario.html" class="btn-menu">Registro</a>
     </div>
     
+        <div class="card admin-only" id="gestionar_asignaciones">
+        <h3>Asignar eventos</h3>
+        <p>Asigna los eventos a los empleados.</p>
+        <a href="gestionar_asignaciones.html" class="btn-menu">Asignar evento</a>
+    </div>
 
 </div>
 
 <script>
-    // se lee el rol del usuario
+    //se lee el rol del usuario iniciado
     const rolUsuario = sessionStorage.getItem('rol');
 
-    // Si no hay ningún rol no se ha iniciado sesion y se manda a la pagina de login
+    //Si no hay ningún rol, significa que no ha iniciado sesión y se manda a la pagina login
     if (!rolUsuario) {
         window.location.href = 'login.html';
     }
 
-    // Si es Administrador (Rol 1)
+    //Ventanas por cada rol de usuario
+
     if (rolUsuario === "1") {
+        //rol 1, puede hacer todo
         document.getElementById('saludo').innerText = "Panel de Administrador";
         
-        // Buscamos todos los elementos con la clase 'admin-only' y los mostramos
+        //opciones de admin(todas)
         const elementosAdmin = document.querySelectorAll('.admin-only');
         elementosAdmin.forEach(elemento => {
             elemento.style.display = 'block';
         });
-    } else {
-        document.getElementById('saludo').innerText = "Panel de Empleado";
+    } 
+    else if (rolUsuario === "2") {
+        //rol 2 empleado de local, solo crea edita eventos y paquetes
+        document.getElementById('saludo').innerText = "Panel de Recepción / Gestión";
+        
+        //mostramos solo contratos y paquetes
+        document.getElementById('moduloContratos').style.display = 'block';
+        document.getElementById('moduloPaquetes').style.display = 'block';
+    } 
+    else if (rolUsuario === "3" || rolUsuario === "4" || rolUsuario === "5") {
+        //rol 3,4,5 (fotografo, camarografo, hibrido)
+        //solo pueden ver su propia agenda de trabajo 
+        if (rolUsuario === "3") {
+            document.getElementById('saludo').innerText = "Panel de Fotografo";
+        } else if (rolUsuario === "4") {
+            document.getElementById('saludo').innerText = "Panel de Camarografo";
+        } else if (rolUsuario === "5") {
+            document.getElementById('saludo').innerText = "Panel de Fotografo/Camarograofo";
+        }
+    } 
+    else {
+        //seguridad, si hay un rol desconocido, se limpia la sesión
+        sessionStorage.clear();
+        window.location.href = 'login.html';
     }
-
+        //se cierra la sesion 
     function cerrarSesion() {
         sessionStorage.clear();
         window.location.href = 'login.html';

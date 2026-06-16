@@ -114,7 +114,7 @@
 </div>
 
 <script>
-    // Función para vaciar el formulario para que vuelva a funcionar
+    //funcion para limpiar formulario
     function limpiarFormulario() {
         document.getElementById('formPaquete').reset();
         document.getElementById('id_paquete').value = "";
@@ -145,7 +145,7 @@
             alert("Hubo un problema de conexión con el servidor.");
         });
     });
-    // Función que llena la tabla
+    //tabla de paquetes jalando desde bd
     function cargarTablaPaquetes() {
         fetch('ObtenerPaquetes')
         .then(response => response.text())
@@ -156,7 +156,7 @@
         .catch(error => console.error('Error:', error));
     }
     
-// Función para que funcione el editar en el formu
+//funcion poara que se pueda editar 
     function editarPaquete(id, categoria, nombre, fotos, video, sesion, fotoGrande, precio) {
         document.getElementById('id_paquete').value = id;
         document.getElementById('categoria_evento').value = categoria;
@@ -171,7 +171,7 @@
         document.getElementById('btnGuardar').innerText = "Actualizar Paquete";
     }
 
-    // Función para mandar a borrar un paquete a la base de datos
+    //funcion para eliminar un paquete
     function eliminarPaquete(id) {
         //Ventana de confirmacion de accion
         if(confirm("¿Estás completamente seguro de que deseas eliminar este paquete?")) {

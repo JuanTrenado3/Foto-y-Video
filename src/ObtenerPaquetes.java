@@ -17,7 +17,7 @@ public class ObtenerPaquetes extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        // Configuramos la respuesta como HTML para que JavaScript la inyecte directo
+        //pagina responsiva
         response.setContentType("text/html;charset=UTF-8");
         
         Connection conn = null;
@@ -28,9 +28,9 @@ public class ObtenerPaquetes extends HttpServlet {
             conn = ConexionPool.getInstancia().getConnection();
             String sql = "SELECT * FROM Paquetes";
             ps = conn.prepareStatement(sql);
-            rs = ps.executeQuery(); // Ejecutamos la consulta
+            rs = ps.executeQuery(); 
 
-            // Recorremos cada paquete que nos devuelva la base de datos
+            //Leemos los paquetes de la bd
             while (rs.next()) {
                 out.print("<tr>");
                 out.print("<td>" + rs.getString("categoria_evento") + "</td>");
@@ -38,7 +38,7 @@ public class ObtenerPaquetes extends HttpServlet {
                 out.print("<td>$" + rs.getDouble("precio_base") + "</td>");
                 out.print("<td>");
                 
-                // Botón Editar 
+                //bototn editar y datos 
                 out.print("<button class='btn-edit' onclick='editarPaquete(" + 
                           rs.getInt("id_paquete") + ", \"" + 
                           rs.getString("categoria_evento") + "\", \"" + 
@@ -50,7 +50,7 @@ public class ObtenerPaquetes extends HttpServlet {
                           rs.getDouble("precio_base") + 
                           ")'>Editar</button> ");
                           
-                // Botón Eliminar
+                //btn eliminar
                 out.print("<button class='btn-delete' onclick='eliminarPaquete(" + rs.getInt("id_paquete") + ")'>Eliminar</button>");
                 out.print("</td>");
                 out.print("</tr>");
