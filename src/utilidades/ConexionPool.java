@@ -7,9 +7,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ConexionPool {
-    private static final String URL = "jdbc:mysql://localhost:3306/estudio_fotografico";
+    /*
+    //CONEXION A BASE DE DATOS LOCAL
+    private static final String URL = "jdbc:mysql://localhost:3306/estudio_fotografico";*/
+    private static final String URL = "jdbc:mysql://localhost:3388/estudio_fotografico?useSSL=false&serverTimezone=UTC";
     private static final String USUARIO = "root";
     private static final String PASSWORD = "";
+    
+    // TUNEL SSH PARA SERVIDOR FIE
+    /*String url = "jdbc:mysql://localhost:3388/estudio_fotografico?useSSL=false&serverTimezone=UTC";*/
+    
+    
     //Tamaño de pool osea conexiones abiertas al mismo tiempo
     private static final int MAX_CONEXIONES = 5;
     
