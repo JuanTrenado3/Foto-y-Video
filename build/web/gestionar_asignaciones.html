@@ -104,6 +104,22 @@
 
         //panel de asignacion
         document.getElementById('panelAsignacion').style.display = 'block';
+        
+        //busca fotógrafos disponibles en esa fecha (Rol 2 y Rol 5)
+        fetch('ObtenerDisponibles?fecha=' + fecha + '&tipo=foto')
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('id_fotografo').innerHTML = html;
+        })
+        .catch(error => console.error('Error al cargar fotógrafos:', error));
+
+        //Busca camarografos disponibles en esa fecha (Rol 3 y Rol 5)
+        fetch('ObtenerDisponibles?fecha=' + fecha + '&tipo=video')
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('id_camarografo').innerHTML = html;
+        })
+        .catch(error => console.error('Error al cargar camarógrafos:', error));
     }
 
     //funcion para ir a la base de datos y traer los eventos pendientes de asignacion
@@ -115,7 +131,43 @@
         })
         .catch(error => console.error('Error al cargar contratos:', error));
     }
+    
+    //funcion para guardar la asignacion a los eventos de camarografos y fotografos
+    function guardarAsignacion() {
+        const idContrato = document.getElementById('id_contrato').value;
+        const idFotografo = document.getElementById('id_fotografo').value;
+        const idCamarografo = document.getElementById('id_camarografo').value;
 
+        //se hace una validacion basica
+        if (!idFotografo && !idCamarografo) {
+            alert("Por favor selecciona al menos a un empleado para el evento.");
+            return;
+        }
+
+        //se mandan los datos para enviarlos por POST siendo empaquetados
+        const formData = new URLSearchParams();
+        formData.append('id_contrato', idContrato);
+        formData.append('id_fotografo', idFotografo);
+        formData.append('id_camarografo', idCamarografo);
+
+        //mando a llamar el archivo servelert
+        fetch('GuardarAsignacion', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.text())
+        .then(texto => {
+            if (texto === "OK") {
+                alert("¡Equipo asignado correctamente al evento!");
+                cerrarPanel(); // Escondemos el panel derecho
+                cargarTablaContratos(); // Recargamos la tabla para ver los cambios
+            } else {
+                alert("Aviso: " + texto);
+            }
+        })
+        .catch(error => console.error('Error al guardar:', error));
+    }
+    
     //Cuando se abra la pagina tendra que cargar la tabla
     window.onload = function() {
         cargarTablaContratos();

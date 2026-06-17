@@ -26,10 +26,11 @@ public class ObtenerContratosParaAsignar extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             conn = ConexionPool.getInstancia().getConnection();
             
-            //Contratos ordenados por los mas cercanos
+            //Contratos ordenados por los mas cercanos y se filtra los que ya estan asignados
             String sql = "SELECT c.id_contrato, c.fecha_evento, c.nombre_cliente, p.nombre_paquete " +
                          "FROM Contratos c " +
                          "INNER JOIN Paquetes p ON c.id_paquete = p.id_paquete " +
+                         "WHERE c.id_contrato NOT IN (SELECT id_contrato FROM Asignaciones) " +
                          "ORDER BY c.fecha_evento ASC";
                          
             ps = conn.prepareStatement(sql);
@@ -44,11 +45,11 @@ public class ObtenerContratosParaAsignar extends HttpServlet {
                 out.print("<td>" + rs.getString("nombre_cliente") + "</td>");
                 out.print("<td>" + rs.getString("nombre_paquete") + "</td>");
                 
-                // Por ahora dejamos el estado como "Pendiente" fijo, después lo haremos dinámico
+               //Solo saldran eventos pendientes
                 out.print("<td><span style='color: #dc3545; font-weight: bold;'>Pendiente</span></td>");
                 
                 out.print("<td>");
-                // Botón que gatilla la función de JavaScript para abrir el panel derecho
+                //la función de JavaScript para abrir el panel derecho
                 out.print("<button class='btn-action' onclick='prepararAsignacion(" + 
                           rs.getInt("id_contrato") + ", \"" + 
                           rs.getString("nombre_cliente") + "\", \"" + 
