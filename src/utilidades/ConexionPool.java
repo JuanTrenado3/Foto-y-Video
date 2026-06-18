@@ -10,9 +10,16 @@ public class ConexionPool {
     /*
     //CONEXION A BASE DE DATOS LOCAL
     private static final String URL = "jdbc:mysql://localhost:3306/estudio_fotografico";*/
+    //CONEXIOPN A BASE DE DATOS ESCUELA
+    /*
     private static final String URL = "jdbc:mysql://localhost:3388/estudio_fotografico?useSSL=false&serverTimezone=UTC";
     private static final String USUARIO = "root";
     private static final String PASSWORD = "";
+    */
+    //CONEXION A BASE DE DATOS EN LA NUBE
+    private static final String URL = "jdbc:mysql://thomas.proxy.rlwy.net:13861/railway?useSSL=false&serverTimezone=UTC";
+    private static final String USUARIO = "root";
+    private static final String PASSWORD = "SHelaMMzSLEVryKSpTbegKgsIGhdVxzQ";
     
     // TUNEL SSH PARA SERVIDOR FIE
     /*String url = "jdbc:mysql://localhost:3388/estudio_fotografico?useSSL=false&serverTimezone=UTC";*/
