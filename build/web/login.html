@@ -49,7 +49,7 @@
         .then(response => response.json())
         .then(data => {
             if(data.status === 'success') {
-                // AQUÍ ESTÁ LA NUEVA LÍNEA: Guardamos el rol en la memoria del navegador
+                //guardamos el rol en memoria de navegador
                 sessionStorage.setItem('rol', data.rol); 
                 
                 // Redirigimos al panel principal

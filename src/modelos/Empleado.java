@@ -1,18 +1,18 @@
 package modelos;
 
 public class Empleado {
-    // 1. Variables privadas que coinciden con las columnas de tu base de datos
+    //variables privadas de la base de datos
     private int idEmpleado;
     private String nombreCompleto;
     private String telefono;
     private String password;
     private int idRol;
 
-    // 2. Constructor vacío (Obligatorio para que Java lo pueda instanciar fácilmente)
+    //constructor vacío (Obligatorio para que Java lo pueda instanciar fácilmente)
     public Empleado() {
     }
 
-    // 3. Constructor con todos los parámetros (Para cuando consultemos la BD)
+    //constructor con todos los parámetros 
     public Empleado(int idEmpleado, String nombreCompleto, String telefono, String password, int idRol) {
         this.idEmpleado = idEmpleado;
         this.nombreCompleto = nombreCompleto;
@@ -21,7 +21,7 @@ public class Empleado {
         this.idRol = idRol;
     }
 
-    // 4. Getters y Setters para acceder y modificar los datos de forma segura
+    //getters y Setters para acceder y modificar los datos de forma segura
     public int getIdEmpleado() {
         return idEmpleado;
     }

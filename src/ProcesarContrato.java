@@ -19,7 +19,7 @@ public class ProcesarContrato extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
 
-        // Datos para el contrato
+        //datos para el contrato
         String nombreCliente = request.getParameter("nombre_cliente");
         String telCliente = request.getParameter("tel_cliente");
         String nombreFestejado = request.getParameter("nombre_festejado");
@@ -30,19 +30,19 @@ public class ProcesarContrato extends HttpServlet {
         String dirFiesta = request.getParameter("dir_fiesta");
         String horaFiesta = request.getParameter("hora_fiesta");
         
-        // Convertimos a decimales por double
+        //convertimos a decimales por double
         double costoTotal = Double.parseDouble(request.getParameter("costo_total"));
         double anticipoPagado = Double.parseDouble(request.getParameter("anticipo_pagado"));
 
-        // Aqui es la conexion y el ql
+        //aqui es la conexion y el ql
         Connection conn = null;
         PreparedStatement ps = null;
 
         try (PrintWriter out = response.getWriter()) {
-            // Usamos el archivo de la conexion 
+            //usamos el archivo de la conexion 
             conn = ConexionPool.getInstancia().getConnection();
             
-            // Aqui dejamos que MySQL calcule el saldo_restante del contrato 
+            //aqui dejamos que MySQL calcule el saldo_restante del contrato 
             String sql = "INSERT INTO Contratos (nombre_cliente, nombre_festejado, tel_cliente, dir_misa, dir_fiesta, fecha_evento, hora_misa, hora_fiesta, id_paquete, costo_total, anticipo_pagado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             
             ps = conn.prepareStatement(sql);
@@ -53,7 +53,7 @@ public class ProcesarContrato extends HttpServlet {
             ps.setString(5, dirFiesta);
             ps.setString(6, fechaEvento);
             
-            // Si no se pone hora se pone un null para la bd
+            //si no se pone hora se pone un null para la bd
             if(horaMisa == null || horaMisa.isEmpty()) { ps.setNull(7, java.sql.Types.TIME); } else { ps.setString(7, horaMisa); }
             if(horaFiesta == null || horaFiesta.isEmpty()) { ps.setNull(8, java.sql.Types.TIME); } else { ps.setString(8, horaFiesta); }
             
@@ -61,11 +61,11 @@ public class ProcesarContrato extends HttpServlet {
             ps.setDouble(10, costoTotal);
             ps.setDouble(11, anticipoPagado);
 
-            // se guarda
+            //se guarda
             int filasAfectadas = ps.executeUpdate();
 
             if (filasAfectadas > 0) {
-                // mensaje de que se guardo o no se pudo guardar
+                //mensaje de que se guardo o no se pudo guardar
                 out.println("<script>alert('Contrato registrado con éxito'); window.location.href='index.html';</script>");
             } else {
                 out.println("<script>alert('Error: No se pudo guardar el contrato.'); window.history.back();</script>");
@@ -74,7 +74,7 @@ public class ProcesarContrato extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            // Siempre liberamos la conexión
+            //siempre liberamos la conexión
             if (ps != null) { try { ps.close(); } catch (Exception e) {} }
             if (conn != null) { ConexionPool.getInstancia().releaseConnection(conn); }
         }

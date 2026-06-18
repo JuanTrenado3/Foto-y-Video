@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mi Agenda - Estudio Fotográfico</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f4f7f6; }
+        .header-agenda { background-color: #212529; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .btn-volver { background-color: #6c757d; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; text-decoration: none; }
+        .card-container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .search-box { width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; box-sizing: border-box; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th { background-color: #28a745; color: white; padding: 12px; text-align: left; }
+        td { padding: 12px; border-bottom: 1px solid #dee2e6; font-size: 15px; vertical-align: top; }
+        tr:hover { background-color: #f1f1f1; }
+        .badge-labor { background-color: #17a2b8; color: white; padding: 5px 10px; border-radius: 4px; font-weight: bold; font-size: 13px; display: inline-block; }
+        .txt-sub { color: #555; font-size: 13px; }
+    </style>
+</head>
+<body>
+
+    <div class="header-agenda">
+        <h2>Agenda: Control de Eventos</h2>
+        <a href="menu.html" class="btn-volver">Volver al Menú</a>
+    </div>
+
+    <div class="card-container">
+        <input type="text" id="txtBuscar" class="search-box" placeholder="Buscar evento por cliente, festejados o fecha (AAAA-MM-DD)..." oninput="cargarAgenda()">
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Cliente / Contrato</th>
+                    <th>Festejado(s)</th>
+                    <th>Horarios</th>
+                    <th>Direcciones / Lugares</th>
+                    <th>Paquete contratado</th>
+                    <th id="thLabor">Estado</th>
+                </tr>
+            </thead>
+            <tbody id="tablaAgenda">
+                </tbody>
+        </table>
+    </div>
+
+    <script>
+        window.onload = function() {
+            fetch('ObtenerRolSesion')
+            .then(response => response.text())
+            .then(rol => {
+                if (parseInt(rol) > 2) {
+                    document.getElementById('txtBuscar').style.display = 'none';
+                    document.getElementById('thLabor').innerText = "Tu Labor Asignada";
+                } else {
+                    document.getElementById('thLabor').innerText = "Estado";
+                }
+                cargarAgenda();
+            });
+        };
+
+        function cargarAgenda() {
+            const filtro = document.getElementById('txtBuscar').value;
+            fetch('ObtenerAgenda?buscar=' + encodeURIComponent(filtro))
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('tablaAgenda').innerHTML = html;
+            })
+            .catch(error => console.error('Error al cargar la agenda:', error));
+        }
+    </script>
+</body>
+</html>

@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-// Este es el nombre que usará el HTML para encontrar este archivo
+//este es el nombre que usará el HTML para encontrar este archivo
 @WebServlet("/ProcesarLogin")
 public class ProcesarLogin extends HttpServlet {
     
@@ -23,15 +23,16 @@ public class ProcesarLogin extends HttpServlet {
         String telefono = request.getParameter("telefono");
         String password = request.getParameter("password");
         
-        // Usamos el archivo que acabamos de crear arriba
         VerificarUsuario validador = new VerificarUsuario();
         Empleado usuario = validador.buscar(telefono, password);
         
         if (usuario != null) {
             HttpSession sesion = request.getSession();
-            sesion.setAttribute("idEmpleado", usuario.getIdEmpleado());
-            sesion.setAttribute("nombre", usuario.getNombreCompleto());
-            sesion.setAttribute("idRol", usuario.getIdRol());
+            
+            //se ajustan los nombres
+            sesion.setAttribute("id_empleado", usuario.getIdEmpleado());
+            sesion.setAttribute("nombre_completo", usuario.getNombreCompleto());
+            sesion.setAttribute("id_rol", usuario.getIdRol());
             
             out.print("{\"status\":\"success\", \"rol\":" + usuario.getIdRol() + "}");
         } else {

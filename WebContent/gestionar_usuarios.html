@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Empleados - Estudio Fotográfico</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f4f7f6; }
+        .header-admin { background-color: #212529; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .btn-volver { background-color: #6c757d; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; text-decoration: none; }
+        .dashboard-container { display: none; max-width: 1100px; margin: auto; gap: 20px; }
+        .card-form { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); flex: 1; height: fit-content; }
+        .card-table { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); flex: 2; }
+        .form-group { margin-bottom: 12px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input, select { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        .btn-main { background-color: #28a745; color: white; border: none; padding: 10px; width: 100%; border-radius: 5px; font-size: 16px; cursor: pointer; font-weight: bold; }
+        .btn-cancelar { background-color: #dc3545; color: white; border: none; padding: 8px; width: 100%; border-radius: 5px; margin-top: 5px; cursor: pointer; display: none; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th { background-color: #28a745; color: white; padding: 10px; text-align: left; }
+        td { padding: 10px; border-bottom: 1px solid #dee2e6; }
+        .btn-edit { background-color: #ffc107; color: black; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; font-weight: bold; margin-right: 5px; }
+        .btn-delete { background-color: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; font-weight: bold; }
+        #mensajeBloqueo { text-align: center; color: #dc3545; font-size: 18px; font-weight: bold; margin-top: 50px; }
+    </style>
+</head>
+<body>
+
+    <div class="header-admin">
+        <h2>Panel Administrativo: Gestión de Personal</h2>
+        <a href="index.html" class="btn-volver">Volver al Menú</a>
+    </div>
+
+    <div id="mensajeBloqueo">Verificando permisos de acceso...</div>
+
+    <div class="dashboard-container" id="panelPrincipal" style="display: flex;">
+        
+        <div class="card-form">
+            <h3 id="formTitulo">Registrar Nuevo Empleado</h3>
+            <form id="formUsuario" onsubmit="procesarUsuario(event)">
+                <input type="hidden" id="id_empleado" value="">
+
+                <div class="form-group">
+                    <label>Nombre Completo:</label>
+                    <input type="text" id="nombre" required placeholder="Ej. Juan Pérez">
+                </div>
+                <div class="form-group">
+                    <label>Teléfono (Usuario):</label>
+                    <input type="text" id="telefono" required placeholder="Ej. 4431234567">
+                </div>
+                <div class="form-group">
+                    <label>Contraseña:</label>
+                    <input type="password" id="password" required placeholder="Contraseña de acceso">
+                </div>
+                <div class="form-group">
+                    <label>Rol en la Empresa:</label>
+                    <select id="rol" required>
+                        <option value="">-- Selecciona un rol --</option>
+                        <option value="1">Administrador</option>
+                        <option value="2">Empleado de Local</option>
+                        <option value="3">Fotógrafo</option>
+                        <option value="4">Camarógrafo</option>
+                        <option value="5">Híbrido</option>
+                    </select>
+                </div>
+                <button type="submit" id="btnAccion" class="btn-main">Registrar Empleado</button>
+                <button type="button" id="btnCancelar" class="btn-cancelar" onclick="limpiarFormulario()">Cancelar Edición</button>
+            </form>
+        </div>
+
+        <div class="card-table">
+            <h3>Personal Registrado</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Teléfono</th>
+                        <th>Rol</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaUsuarios">
+                    </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        window.onload = function() {
+            fetch('ObtenerRolSesion')
+            .then(response => response.text())
+            .then(rol => {
+                if (parseInt(rol) === 1) {
+                    document.getElementById('mensajeBloqueo').style.display = 'none';
+                    document.getElementById('panelPrincipal').style.display = 'flex';
+                    cargarTablaUsuarios();
+                } else {
+                    document.getElementById('mensajeBloqueo').innerText = "Acceso Denegado: Reservado para el Administrador.";
+                }
+            });
+        };
+
+        function cargarTablaUsuarios() {
+            fetch('ListarUsuarios')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('tablaUsuarios').innerHTML = html;
+            });
+        }
+
+        function procesarUsuario(event) {
+            event.preventDefault();
+            const id = document.getElementById('id_empleado').value;
+            const nombre = document.getElementById('nombre').value;
+            const telefono = document.getElementById('telefono').value;
+            const password = document.getElementById('password').value;
+            const rol = document.getElementById('rol').value;
+
+            const formData = new URLSearchParams();
+            formData.append('nombre_completo', nombre);
+            formData.append('telefono', telefono);
+            formData.append('password', password);
+            formData.append('id_rol', rol);
+
+            //si hay ID, mandamos a editar, si no hay se manda a registrar
+            let urlDestino = 'RegistrarUsuario';
+            if (id !== "") {
+                urlDestino = 'EditarUsuario';
+                formData.append('id_empleado', id);
+            }
+
+            fetch(urlDestino, { method: 'POST', body: formData })
+            .then(response => response.text())
+            .then(texto => {
+                if (texto === "OK") {
+                    alert(id === "" ? "¡Empleado registrado!" : "¡Datos actualizados!");
+                    limpiarFormulario();
+                    cargarTablaUsuarios();
+                } else {
+                    alert("Aviso: " + texto);
+                }
+            });
+        }
+
+        //sube los datos de la fila directo al formulario
+        function prepararEdicion(id, nombre, telefono, password, idRol) {
+            document.getElementById('id_empleado').value = id;
+            document.getElementById('nombre').value = nombre;
+            document.getElementById('telefono').value = telefono;
+            document.getElementById('password').value = password;
+            document.getElementById('rol').value = idRol;
+
+            document.getElementById('formTitulo').innerText = "Modificar Empleado";
+            document.getElementById('btnAccion').innerText = "Guardar Cambios";
+            document.getElementById('btnAccion').style.backgroundColor = "#ffc107";
+            document.getElementById('btnAccion').style.color = "black";
+            document.getElementById('btnCancelar').style.display = "block";
+        }
+
+        function limpiarFormulario() {
+            document.getElementById('id_empleado').value = "";
+            document.getElementById('formUsuario').reset();
+            document.getElementById('formTitulo').innerText = "Registrar Nuevo Empleado";
+            document.getElementById('btnAccion').innerText = "Registrar Empleado";
+            document.getElementById('btnAccion').style.backgroundColor = "#28a745";
+            document.getElementById('btnAccion').style.color = white;
+            document.getElementById('btnCancelar').style.display = "none";
+        }
+
+        function darDeBaja(id, nombre) {
+            if (confirm("¿Estás seguro de dar de baja a " + nombre + "? Se eliminarán también sus asignaciones activas.")) {
+                const formData = new URLSearchParams();
+                formData.append('id_empleado', id);
+
+                fetch('EliminarUsuario', { method: 'POST', body: formData })
+                .then(response => response.text())
+                .then(texto => {
+                    if (texto === "OK") {
+                        alert("Empleado dado de baja correctamente.");
+                        cargarTablaUsuarios();
+                    } else {
+                        alert("Error: " + texto);
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html>

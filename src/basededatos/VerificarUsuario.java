@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 
 public class VerificarUsuario {
     
-    // Función que busca al usuario en MySQL
+    //funcion que busca al usuario en MySQL
     public Empleado buscar(String telefono, String password) {
         Empleado empleado = null;
         Connection con = null;
