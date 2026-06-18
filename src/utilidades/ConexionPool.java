@@ -17,7 +17,8 @@ public class ConexionPool {
     private static final String PASSWORD = "";
     */
     //CONEXION A BASE DE DATOS EN LA NUBE
-    private static final String URL = "jdbc:mysql://thomas.proxy.rlwy.net:13861/railway?useSSL=false&serverTimezone=UTC";
+    //private static final String URL = "jdbc:mysql://thomas.proxy.rlwy.net:13861/railway?useSSL=false&serverTimezone=UTC";
+    private static final String URL = "jdbc:mysql://thomas.proxy.rlwy.net:13861/railway?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
     private static final String USUARIO = "root";
     private static final String PASSWORD = "SHelaMMzSLEVryKSpTbegKgsIGhdVxzQ";
     
